@@ -1,0 +1,46 @@
+# CONFIG of vars
+# ****************************************
+
+#COMMON
+LOG_PATH_FILE='../../'
+
+#SEAFILE
+SEAFILE_SERVER='0.0.0.0'
+SEAFILE_PORT='8000'
+SEAFILE_USER='radek@bobanovo.cz'
+SEAFILE_PASS='bobanek'
+SEAFILE_TOKEN='39299e3fd856f1d541a4ce9fbb40d2e7741b2aa4'
+SEAFILE_REPO='caf3810f-45be-4bc1-af6f-329828c7f5e7'
+SEAFILE_LINK='http://%s/api2/repos/caf3810f-45be-4bc1-af6f-329828c7f5e7/upload-link/' % (SEAFILE_SERVER+':'+SEAFILE_PORT)
+
+
+#IMAP client
+IMAP_SERVER='mail.fabob.net'
+IMAP_PORT=''
+IMAP_USER='kone.cloud@fabob.net'
+IMAP_PASS='koneKONEkone'
+IMAP_INBOX='Inbox'
+IMAP_ARCHIVMAILBOX='Processed'
+FILE_OUTDIR='../../koneCloud'
+
+
+#logger
+DB_CLIENT='sqlite'
+DB_SERVER_SQLITE=''
+DB_PORT_SQLITE=''
+DB_USER_SQLITE=''
+DB_PASS_SQLITE=''
+DB_DBNAME_SQLITE='../../CloudRecordDB'
+DB_TBLNAME_SQLITE='MessagesTbl'
+
+#ZMQ
+ZMQ_SEAFILE_SERVER='127.0.0.1'
+ZMQ_SEAFILE_PORT='6683'
+ZMQ_LOGGER_SERVER='127.0.0.1'
+ZMQ_LOGGER_PORT='6673'
+ZMQ_PARSERTAG='::'
+ZMQ_TIMEOUT=1
+
+
+
+

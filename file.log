@@ -1,0 +1,25 @@
+2018-11-27 18:49:54,731 - __main__ - INFO - Starting saveIMAP_v2.py
+2018-11-27 18:49:54,731 - __main__ - INFO - IMAP_SERVER: mail.fabob.net
+2018-11-27 18:49:54,731 - __main__ - INFO - IMAP_USER: kone.cloud@fabob.net
+2018-11-27 18:49:54,731 - __main__ - INFO - FILE_OUTDIR: ../../koneCloud
+2018-11-27 18:49:54,731 - __main__ - INFO - -----------------------------------------------------------
+2018-11-27 18:49:55,001 - __main__ - INFO - SUBJECT : KONE Callout record : SPOLECENSTVI TENISOVA 961, 10137544,V2
+2018-11-27 18:49:55,001 - __main__ - INFO - TO      : "'kone.cloud@fabob.net'" <kone.cloud@fabob.net>
+2018-11-27 18:49:55,001 - __main__ - INFO - FROM    : Simek Frantisek <Frantisek.Simek@kone.com>
+2018-11-27 18:49:55,001 - __main__ - INFO - DATE    : Thu, 22 Nov 2018 11:11:50 +0000
+2018-11-27 18:49:55,002 - __main__ - INFO - ZMQ     : Thu, 22 Nov 2018 11:11:50 +0000::Simek Frantisek <Frantisek.Simek@kone.com>::KONE Callout record : SPOLECENSTVI TENISOVA 961, 10137544,V2::10137544.pdf::../../koneCloud/d93fb358-f26c-11e8-9856-8019345f0550.pdf
+2018-11-27 18:49:55,003 - __main__ - INFO - -----------------------------------------------------------
+2018-11-27 18:49:56,042 - __main__ - INFO - SUBJECT :  =?utf-8?B?S09ORSBDYWxsb3V0IHJlY29yZCA6IFNQT0xFxIxFTlNUVsONIEpBTk9WU0s=?=
+ =?utf-8?B?w4EsICAxMDEzODU3OSxKQU5PVlNLw4EgMzcy?=
+2018-11-27 18:49:56,042 - __main__ - INFO - TO      : "'kone.cloud@fabob.net'" <kone.cloud@fabob.net>
+2018-11-27 18:49:56,043 - __main__ - INFO - FROM    : Simek Frantisek <Frantisek.Simek@kone.com>
+2018-11-27 18:49:56,043 - __main__ - INFO - DATE    : Thu, 22 Nov 2018 11:12:12 +0000
+2018-11-27 18:49:56,043 - __main__ - INFO - ZMQ     : Thu, 22 Nov 2018 11:12:12 +0000::Simek Frantisek <Frantisek.Simek@kone.com>:: =?utf-8?B?S09ORSBDYWxsb3V0IHJlY29yZCA6IFNQT0xFxIxFTlNUVsONIEpBTk9WU0s=?=
+ =?utf-8?B?w4EsICAxMDEzODU3OSxKQU5PVlNLw4EgMzcy?=::10138579.pdf::../../koneCloud/d9de9df6-f26c-11e8-9856-8019345f0550.pdf
+2018-11-27 18:49:56,044 - __main__ - INFO - -----------------------------------------------------------
+2018-11-27 18:49:57,083 - __main__ - INFO - SUBJECT : KONE maintenance visit record: BELLUSOVA, PRAHA 5, 675314966,V3
+2018-11-27 18:49:57,084 - __main__ - INFO - TO      : "'kone.cloud@fabob.net'" <kone.cloud@fabob.net>
+2018-11-27 18:49:57,084 - __main__ - INFO - FROM    : Simek Frantisek <Frantisek.Simek@kone.com>
+2018-11-27 18:49:57,084 - __main__ - INFO - DATE    : Thu, 22 Nov 2018 11:12:42 +0000
+2018-11-27 18:49:57,084 - __main__ - INFO - ZMQ     : Thu, 22 Nov 2018 11:12:42 +0000::Simek Frantisek <Frantisek.Simek@kone.com>::KONE maintenance visit record: BELLUSOVA, PRAHA 5, 675314966,V3::675314966.pdf::../../koneCloud/da7d7a52-f26c-11e8-9856-8019345f0550.pdf
+2018-11-27 18:49:57,085 - __main__ - INFO - -----------------------------------------------------------
