@@ -1,6 +1,7 @@
 from  MyDocs_config import *
 import imaplib
 import email
+from email.header import Header, decode_header, make_header
 import logging
 import zmq
 import os
@@ -9,6 +10,7 @@ import sys
 from pathlib import PurePosixPath
 import uuid
 import io
+import json
 
 # Connect to an IMAP server
 def connect(server, user, password):
@@ -22,10 +24,17 @@ def downloaAttachmentsInEmail(m, emailid, outputdir):
     resp, data = m.fetch(emailid, "(RFC822)") # "(BODY.PEEK[])")
     email_body = data[0][1]
     mail = email.message_from_string(email_body)
+    header_part={}
     
-    # read header - for SUBJECT FROM TO
+    # read header - for SUBJECT FROM TO - ensure right encoding
     for header in [ 'subject', 'to', 'from','date' ]:
-        log.info('%-8s: %s' % (header.upper(), mail[header]))
+        header_part[header], encoding = decode_header(mail[header])[0]
+        if encoding==None:
+            log.debug('%-8s: %s' % (header.upper(), header_part[header]))
+        else:
+            header_part[header]=header_part[header].decode(encoding)
+            log.debug('%-8s: %s' % (header.upper(), header_part[header]))
+        
     
     
     # check attachment
@@ -42,25 +51,47 @@ def downloaAttachmentsInEmail(m, emailid, outputdir):
         if (part.get_filename()):
             # create link
             filename=part.get_filename()
-            file_extension= PurePosixPath(filename).suffix
+            file_extension=PurePosixPath(filename).suffix
             
+            # recoding
+            tmp_filename, encoding = decode_header(filename)[0]
+            if encoding==None:
+                pass
+            else:
+                filename=tmp_filename.decode(encoding)
+            log.debug('FILENAME: '+filename)
+            
+                    
             link_filename = outputdir + '/' + str(uuid.uuid1()) +file_extension
             fp = open(link_filename, 'wb')
             fp.write(part.get_payload(decode=True))
             fp.close()
             log.debug('Saved file: '+filename+' as: '+link_filename)
             
-
+            # prepare JSON object
+            ZMQmsg_obj={}
+            ZMQmsg_obj['Date']=mail['date']
+            ZMQmsg_obj['From']=mail['from']
+            ZMQmsg_obj['Subject']=mail['subject']
+            ZMQmsg_obj['Filename']=part.get_filename() # filename
+            ZMQmsg_obj['LinkFilename']=link_filename
+            log.debug('JSON:')
+            log.debug(json.dumps(ZMQmsg_obj))
+        
+                
     # temp = m.store(emailid,'+FLAGS', '\\Seen')
     # move to Processed and delete
     # m.copy(emailid, 'Processed')
     # temp = m.store(emailid, '+FLAGS', r'(\Deleted)')
     # typ, response = m.expunge() # delete flaged mails
     try:
-        ZMQmsg=mail['date']+ZMQ_PARSERTAG+mail['from']+ZMQ_PARSERTAG+mail['subject']+ZMQ_PARSERTAG+filename+ZMQ_PARSERTAG+link_filename
+        ZMQmsg=header_part['date']+ZMQ_PARSERTAG+header_part['from']+ZMQ_PARSERTAG+mail['subject']+ZMQ_PARSERTAG+filename+ZMQ_PARSERTAG+link_filename
         log.info('%-8s: %s' % ('ZMQ',ZMQmsg))
-        ZMQsend(ZMQmsg,ZMQ_LOGGER_SERVER, ZMQ_LOGGER_PORT, ZMQ_TIMEOUT)  
-        ZMQsend(ZMQmsg,ZMQ_SEAFILE_SERVER, ZMQ_SEAFILE_PORT, ZMQ_TIMEOUT)  
+        
+        ZMQsend(json.dumps(ZMQmsg_obj),ZMQ_LOGGER_SERVER, ZMQ_LOGGER_PORT, ZMQ_TIMEOUT)  
+        
+        ZMQsend(json.dumps(ZMQmsg_obj),ZMQ_SEAFILE_SERVER, ZMQ_SEAFILE_PORT, ZMQ_TIMEOUT)  
+        # ZMQsend(ZMQmsg,ZMQ_SEAFILE_SERVER, ZMQ_SEAFILE_PORT, ZMQ_TIMEOUT)  
         log.info('-----------------------------------------------------------') # end of one mail
     except Exception as e:
         log.error('Failed to send info about emails attachments via ZMQ: '+ str(e))
@@ -113,7 +144,7 @@ if __name__=="__main__":
     f_handler.setFormatter(f_format)    
     log.addHandler(f_handler)
     
-    log.setLevel('INFO')
+    log.setLevel('DEBUG')
     
     log.debug('Version of python: ' + sys.version) 
     log.info('Starting '+__file__)

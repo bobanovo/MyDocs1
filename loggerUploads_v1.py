@@ -6,6 +6,8 @@ import sys
 import datetime
 import time
 import sqlite3 as db #for sqlite version
+from email.header import Header, decode_header, make_header
+import json
 
 def listen():
     '''
@@ -25,6 +27,14 @@ def listen():
                         # expect Date::From::Subject::Filename::LinkFilename - 0:4
                         messageData=message.split("::")
                         
+                        # coding emial subject
+                        header_subject, encoding = decode_header(messageData[2])[0]
+                        if encoding==None:
+                            log.info('%-8s: %s' % ('SUBJ: ', header_subject))
+                        else:
+                            log.info('%-8s: %s' % ('SUBJ: ', header_subject.decode(encoding)))
+                                                
+                        
                         log.debug('Data for SQL:')
                         log.debug(messageData)
                         try:
@@ -36,6 +46,52 @@ def listen():
                             log.info('-----------------------------------------------------------')
                     else:
                         log.debug('no data for store (without parsertag as '+ZMQ_PARSERTAG)
+                    
+                
+                time.sleep (1) 
+
+
+def listen2(): # with JSON
+    '''
+    Receive message via ZeroMQ
+    '''
+    with zmq.Context() as context:
+        with context.socket(zmq.PULL) as socket:
+    
+            socket.bind('tcp://%s:%s' % (ZMQ_LOGGER_SERVER, ZMQ_LOGGER_PORT))
+            log.info('Listening... on tcp://*:%s'  % ZMQ_LOGGER_PORT)
+    
+            while True:
+                message = socket.recv_string()
+                if message: # we have a new message
+                    log.info('\n Received message: ' + message + '\n')
+                    deser_msg = {}
+                    deser_msg = json.loads(message) # deserialization of message
+                    
+                    ZMQmsg_obj = {}
+                    # read 
+                    for tmp_msg_part_key in deser_msg.keys():
+                        ZMQmsg_obj[tmp_msg_part_key], encoding = decode_header(deser_msg[tmp_msg_part_key])[0]
+                        if encoding==None:
+                            log.debug('%-8s: %s' % (tmp_msg_part_key.upper(), ZMQmsg_obj[tmp_msg_part_key]))
+                        else:
+                            ZMQmsg_obj[tmp_msg_part_key]=ZMQmsg_obj[tmp_msg_part_key].decode(encoding)
+                            log.debug('%-8s: %s' % (tmp_msg_part_key.upper(),ZMQmsg_obj[tmp_msg_part_key]))
+                                        
+                    
+                        
+                    log.debug('Data for SQL:')
+                    log.debug(ZMQmsg_obj)
+                    
+                    try:
+                        storedata_sqlite(DB_DBNAME_SQLITE,DB_TBLNAME_SQLITE,[ZMQmsg_obj['Date'],ZMQmsg_obj['From'],ZMQmsg_obj['Subject'],ZMQmsg_obj['Filename'],ZMQmsg_obj['LinkFilename']])
+                        log.debug('Data stored')
+                    except Exception as e:
+                        log.error('Failed to store into DB: '+ str(e))
+                    finally:
+                        log.info('-----------------------------------------------------------')
+                else:
+                    log.debug('no data for store (no JSON or without parsertag as '+ZMQ_PARSERTAG)
                     
                 
                 time.sleep (1) 
@@ -103,4 +159,4 @@ if __name__=="__main__":
         if dbcon:
             dbcon.close()    
     
-    listen()
+    listen2()
