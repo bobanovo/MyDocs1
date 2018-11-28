@@ -1,8 +1,13 @@
 certifi==2018.10.15
 chardet==3.0.4
+Click==7.0
 email==4.0.2
+Flask==1.0.2
 idna==2.7
+itsdangerous==1.1.0
+Jinja2==2.10
 logging==0.4.9.6
+MarkupSafe==1.1.0
 pathlib==1.0.1
 pyzmq==17.1.2
 requests==2.20.1
@@ -10,4 +15,5 @@ seafileapi==0.1.1
 simplejson==3.16.0
 urllib3==1.24.1
 uuid==1.30
+Werkzeug==0.14.1
 zmq==0.0.0
